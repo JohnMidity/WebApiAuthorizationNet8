@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/WebApiAuthorizationNet8/my_test_app.db
+/WebApiAuthorizationNet8/my_test_app.db-shm
+/WebApiAuthorizationNet8/my_test_app.db-wal

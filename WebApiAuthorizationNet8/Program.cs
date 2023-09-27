@@ -1,4 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using WebApiAuthorizationNet8;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services
+    .AddIdentityApiEndpoints<AppUser>()
+    .AddEntityFrameworkStores<AppDbContext>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -13,8 +25,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
+app.UseAuthorization();
+
+app.MapGroup("/account").MapIdentityApi<AppUser>();
 
 var summaries = new[]
 {
@@ -34,6 +48,7 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast")
+.RequireAuthorization()
 .WithOpenApi();
 
 app.Run();
